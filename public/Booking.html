@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Book Service - FixNear</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        header {
+            background: #1677ff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .booking-box {
+            max-width: 550px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .booking-box h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        textarea {
+            height: 90px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 13px;
+            background: #1677ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0d5ed7;
+        }
+
+        .note {
+            text-align: center;
+            color: #666;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>FixNear</h1>
+        <p>Book a Trusted Service</p>
+    </header>
+
+    <div class="booking-box">
+
+        <h2>Customer Booking</h2>
+
+        <form action="/book" method="POST">
+
+            <label>Customer Name</label>
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter your name"
+                required
+            >
+
+            <label>Phone Number</label>
+            <input
+                type="tel"
+                name="phone"
+                placeholder="Enter phone number"
+                required
+            >
+
+            <label>Select Service</label>
+            <select name="service" required>
+
+                <option value="">-- Select Service --</option>
+
+                <option value="Electrician">
+                    Electrician
+                </option>
+
+                <option value="Plumber">
+                    Plumber
+                </option>
+
+                <option value="AC Repair">
+                    AC Repair
+                </option>
+
+                <option value="Cleaning">
+                    Cleaning
+                </option>
+
+            </select>
+
+            <label>Address</label>
+            <textarea
+                name="address"
+                placeholder="Enter your complete address"
+                required
+            ></textarea>
+
+            <label>Service Date</label>
+            <input
+                type="date"
+                name="date"
+                required
+            >
+
+            <button type="submit">
+                Confirm Booking
+            </button>
+
+        </form>
+
+        <p class="note">
+            Your booking details will be securely saved.
+        </p>
+
+    </div>
+
+</body>
+
+</html>

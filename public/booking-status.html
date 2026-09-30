@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Check Booking - FixNear</title>
+
+
+    <style>
+
+        /* =========================================================
+           FIXNEAR — PREMIUM BOOKING STATUS PAGE
+           ========================================================= */
+
+        :root {
+            --primary: #1677ff;
+            --primary-dark: #075dcc;
+            --purple: #684dff;
+
+            --text: #172033;
+            --muted: #667085;
+
+            --white: #ffffff;
+
+            --success: #16a34a;
+            --warning: #a16207;
+            --danger: #dc2626;
+
+            --shadow:
+                0 25px 70px rgba(20, 40, 80, 0.12);
+        }
+
+
+        /* =========================================================
+           RESET
+           ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        /* =========================================================
+           BODY
+           ========================================================= */
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                "Inter",
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            color: var(--text);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 40px 20px;
+
+            overflow-x: hidden;
+
+            background:
+
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(22, 119, 255, 0.10),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(104, 77, 255, 0.10),
+                    transparent 30%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #f4f8ff 0%,
+                    #f8fbff 50%,
+                    #ffffff 100%
+                );
+
+            position: relative;
+        }
+
+
+        /* =========================================================
+           BACKGROUND GLOW
+           ========================================================= */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            width: 450px;
+            height: 450px;
+
+            border-radius: 50%;
+
+            top: -200px;
+            right: -170px;
+
+            background:
+                rgba(22, 119, 255, 0.10);
+
+            filter: blur(100px);
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+
+        body::after {
+
+            content: "";
+
+            position: fixed;
+
+            width: 400px;
+            height: 400px;
+
+            border-radius: 50%;
+
+            bottom: -200px;
+            left: -170px;
+
+            background:
+                rgba(104, 77, 255, 0.08);
+
+            filter: blur(100px);
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+
+        /* =========================================================
+           MAIN CARD
+           ========================================================= */
+
+        .card {
+
+            width: 100%;
+
+            max-width: 520px;
+
+            background:
+                rgba(255, 255, 255, 0.95);
+
+            padding: 42px;
+
+            border-radius: 24px;
+
+            border:
+                1px solid rgba(22, 119, 255, 0.08);
+
+            box-shadow: var(--shadow);
+
+            backdrop-filter: blur(20px);
+
+            -webkit-backdrop-filter: blur(20px);
+
+            position: relative;
+
+            overflow: hidden;
+
+            animation:
+                cardReveal 0.7s
+                cubic-bezier(.2,.8,.2,1)
+                both;
+        }
+
+
+        @keyframes cardReveal {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(30px)
+                    scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+
+        /* =========================================================
+           CARD TOP LINE
+           ========================================================= */
+
+        .card::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+
+            height: 4px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--primary),
+                    var(--purple)
+                );
+        }
+
+
+        /* =========================================================
+           LOGO
+           ========================================================= */
+
+        .logo {
+
+            text-align: center;
+
+            font-size: 29px;
+
+            font-weight: 800;
+
+            letter-spacing: -1px;
+
+            margin-bottom: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--purple)
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        /* =========================================================
+           TITLE
+           ========================================================= */
+
+        h1 {
+
+            text-align: center;
+
+            font-size: 30px;
+
+            line-height: 1.2;
+
+            letter-spacing: -1px;
+
+            color: var(--text);
+
+            margin-bottom: 12px;
+        }
+
+
+        /* =========================================================
+           DESCRIPTION
+           ========================================================= */
+
+        .description {
+
+            text-align: center;
+
+            color: var(--muted);
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            margin-bottom: 28px;
+        }
+
+
+        /* =========================================================
+           INPUT
+           ========================================================= */
+
+        input {
+
+            width: 100%;
+
+            height: 52px;
+
+            padding: 0 16px;
+
+            border:
+                1px solid #d8dee9;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            background: #ffffff;
+
+            color: var(--text);
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            transition:
+                border-color 0.25s ease,
+                box-shadow 0.25s ease,
+                transform 0.25s ease;
+        }
+
+
+        input::placeholder {
+            color: #98a2b3;
+        }
+
+
+        input:hover {
+
+            border-color:
+                rgba(22, 119, 255, 0.35);
+        }
+
+
+        input:focus {
+
+            border-color:
+                var(--primary);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(22, 119, 255, 0.10);
+        }
+
+
+        /* =========================================================
+           BUTTON
+           ========================================================= */
+
+        button {
+
+            width: 100%;
+
+            height: 52px;
+
+            margin-top: 13px;
+
+            padding: 0 18px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-dark)
+                );
+
+            color: white;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 10px 25px
+                rgba(22, 119, 255, 0.23);
+
+            position: relative;
+
+            overflow: hidden;
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+
+        /* BUTTON SHINE */
+
+        button::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+
+            left: -120%;
+
+            width: 80%;
+
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,0.30),
+                    transparent
+                );
+
+            transform: skewX(-25deg);
+
+            transition: 0.6s;
+        }
+
+
+        button:hover::before {
+            left: 140%;
+        }
+
+
+        button:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 15px 35px
+                rgba(22, 119, 255, 0.30);
+        }
+
+
+        button:active {
+
+            transform:
+                translateY(0);
+        }
+
+
+        /* =========================================================
+           LOADING MESSAGE
+           ========================================================= */
+
+        .loading {
+
+            text-align: center;
+
+            color: var(--primary);
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            padding: 15px 0;
+
+            animation:
+                pulse 1.2s ease-in-out infinite;
+        }
+
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.45;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+
+        /* =========================================================
+           RESULT
+           ========================================================= */
+
+        #result {
+
+            margin-top: 25px;
+        }
+
+
+        /* =========================================================
+           BOOKING RESULT CARD
+           ========================================================= */
+
+        .booking-result {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f3f7ff,
+                    #f8faff
+                );
+
+            padding: 23px;
+
+            border-radius: 14px;
+
+            border-left:
+                4px solid var(--primary);
+
+            box-shadow:
+                0 8px 25px
+                rgba(20, 40, 80, 0.05);
+
+            animation:
+                resultReveal 0.4s ease both;
+        }
+
+
+        @keyframes resultReveal {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(10px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        /* =========================================================
+           RESULT HEADING
+           ========================================================= */
+
+        .booking-result h2 {
+
+            margin:
+                0 0 20px;
+
+            color:
+                var(--primary);
+
+            font-size: 20px;
+
+            line-height: 1.3;
+        }
+
+
+        /* =========================================================
+           RESULT TEXT
+           ========================================================= */
+
+        .booking-result p {
+
+            margin:
+                0 0 13px;
+
+            color:
+                #344054;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        .booking-result strong {
+
+            color:
+                #111827;
+        }
+
+
+        /* =========================================================
+           STATUS
+           ========================================================= */
+
+        .status {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            width: fit-content;
+
+            padding:
+                7px 13px;
+
+            border-radius:
+                999px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            line-height: 1;
+
+            margin-top: 2px;
+        }
+
+
+        /* PENDING */
+
+        .pending {
+
+            background:
+                #fff3cd;
+
+            color:
+                #a16207;
+        }
+
+
+        /* CONFIRMED */
+
+        .confirmed {
+
+            background:
+                #dcfce7;
+
+            color:
+                #15803d;
+        }
+
+
+        /* COMPLETED */
+
+        .completed {
+
+            background:
+                #dbeafe;
+
+            color:
+                #1d4ed8;
+        }
+
+
+        /* CANCELLED */
+
+        .cancelled {
+
+            background:
+                #fee2e2;
+
+            color:
+                #b91c1c;
+        }
+
+
+        /* IN PROGRESS */
+
+        .in-progress {
+
+            background:
+                #ede9fe;
+
+            color:
+                #6d28d9;
+        }
+
+
+        /* =========================================================
+           NOT FOUND / ERROR
+           ========================================================= */
+
+        .error-result {
+
+            background:
+                #fff5f5;
+
+            border-left-color:
+                var(--danger);
+        }
+
+
+        .error-result h2 {
+
+            color:
+                var(--danger);
+        }
+
+
+        /* =========================================================
+           HOME LINK
+           ========================================================= */
+
+        .home {
+
+            display: block;
+
+            width: fit-content;
+
+            margin:
+                25px auto 0;
+
+            color:
+                var(--primary);
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            transition:
+                0.3s ease;
+        }
+
+
+        .home:hover {
+
+            color:
+                var(--primary-dark);
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* =========================================================
+           MOBILE
+           ========================================================= */
+
+        @media (max-width: 600px) {
+
+            body {
+
+                padding:
+                    20px 14px;
+            }
+
+
+            .card {
+
+                padding:
+                    30px 20px;
+
+                border-radius:
+                    20px;
+            }
+
+
+            .logo {
+
+                font-size:
+                    25px;
+            }
+
+
+            h1 {
+
+                font-size:
+                    25px;
+
+                letter-spacing:
+                    -0.5px;
+            }
+
+
+            .description {
+
+                font-size:
+                    13px;
+
+                margin-bottom:
+                    23px;
+            }
+
+
+            input,
+            button {
+
+                height:
+                    50px;
+            }
+
+
+            .booking-result {
+
+                padding:
+                    19px;
+            }
+
+
+            .booking-result h2 {
+
+                font-size:
+                    18px;
+            }
+
+
+            .booking-result p {
+
+                font-size:
+                    13px;
+            }
+        }
+
+
+        /* =========================================================
+           SMALL MOBILE
+           ========================================================= */
+
+        @media (max-width: 380px) {
+
+            .card {
+
+                padding:
+                    26px 16px;
+            }
+
+
+            h1 {
+
+                font-size:
+                    23px;
+            }
+
+
+            .booking-result {
+
+                padding:
+                    16px;
+            }
+        }
+
+
+        /* =========================================================
+           ACCESSIBILITY
+           ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+
+                animation-duration:
+                    0.01ms !important;
+
+                animation-iteration-count:
+                    1 !important;
+
+                transition-duration:
+                    0.01ms !important;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+         MAIN CARD
+         ========================================================= -->
+
+    <div class="card">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+            FixNear
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h1>
+            Check Booking Status
+        </h1>
+
+
+        <!-- DESCRIPTION -->
+
+        <p class="description">
+
+            Enter your Booking ID to check
+            your service booking status.
+
+        </p>
+
+
+        <!-- BOOKING ID -->
+
+        <input
+            type="text"
+            id="bookingId"
+            placeholder="Enter Booking ID"
+            autocomplete="off"
+        >
+
+
+        <!-- CHECK BUTTON -->
+
+        <button
+            type="button"
+            onclick="checkBooking()"
+        >
+            Check Status
+        </button>
+
+
+        <!-- RESULT -->
+
+        <div id="result"></div>
+
+
+        <!-- HOME -->
+
+        <a
+            href="index.html"
+            class="home"
+        >
+            🏠 Back to Home
+        </a>
+
+
+    </div>
+
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+         ========================================================= -->
+
+    <script>
+
+
+        async function checkBooking() {
+
+
+            /* -----------------------------------------
+               GET BOOKING ID
+            ----------------------------------------- */
+
+            const bookingId =
+                document
+                    .getElementById("bookingId")
+                    .value
+                    .trim();
+
+
+            /* -----------------------------------------
+               VALIDATION
+            ----------------------------------------- */
+
+            if (bookingId === "") {
+
+                alert(
+                    "Please enter Booking ID"
+                );
+
+                document
+                    .getElementById("bookingId")
+                    .focus();
+
+                return;
+            }
+
+
+            /* -----------------------------------------
+               RESULT ELEMENT
+            ----------------------------------------- */
+
+            const result =
+                document.getElementById("result");
+
+
+            /* -----------------------------------------
+               LOADING
+            ----------------------------------------- */
+
+            result.innerHTML = `
+                
+                <div class="loading">
+                    Checking booking...
+                </div>
+
+            `;
+
+
+            try {
+
+
+                /* -----------------------------------------
+                   API REQUEST
+                ----------------------------------------- */
+
+                const response =
+                    await fetch(
+                        `/api/booking/${encodeURIComponent(bookingId)}`
+                    );
+
+
+                /* -----------------------------------------
+                   JSON RESPONSE
+                ----------------------------------------- */
+
+                const booking =
+                    await response.json();
+
+
+                /* -----------------------------------------
+                   BOOKING NOT FOUND
+                ----------------------------------------- */
+
+                if (!response.ok) {
+
+                    result.innerHTML = `
+
+                        <div class="booking-result error-result">
+
+                            <h2>
+                                Booking Not Found ❌
+                            </h2>
+
+                            <p>
+                                ${escapeHTML(
+                                    booking.message ||
+                                    "No booking found with this Booking ID."
+                                )}
+                            </p>
+
+                        </div>
+
+                    `;
+
+                    return;
+                }
+
+
+                /* -----------------------------------------
+                   STATUS CLASS
+                ----------------------------------------- */
+
+                const status =
+                    String(
+                        booking.status || "Pending"
+                    )
+                    .toLowerCase()
+                    .trim()
+                    .replace(/\s+/g, "-");
+
+
+                /* -----------------------------------------
+                   SHOW BOOKING
+                ----------------------------------------- */
+
+                result.innerHTML = `
+
+                    <div class="booking-result">
+
+                        <h2>
+                            Booking Details ✅
+                        </h2>
+
+
+                        <p>
+
+                            <strong>
+                                Booking ID:
+                            </strong>
+
+                            ${escapeHTML(
+                                booking._id || bookingId
+                            )}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Name:
+                            </strong>
+
+                            ${escapeHTML(
+                                booking.name || "N/A"
+                            )}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Service:
+                            </strong>
+
+                            ${escapeHTML(
+                                booking.service || "N/A"
+                            )}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Date:
+                            </strong>
+
+                            ${escapeHTML(
+                                booking.date || "N/A"
+                            )}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Address:
+                            </strong>
+
+                            ${escapeHTML(
+                                booking.address || "N/A"
+                            )}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Status:
+                            </strong>
+
+                        </p>
+
+
+                        <span
+                            class="status ${status}"
+                        >
+                            ${escapeHTML(
+                                booking.status || "Pending"
+                            )}
+                        </span>
+
+
+                    </div>
+
+                `;
+
+
+            } catch (error) {
+
+
+                /* -----------------------------------------
+                   ERROR
+                ----------------------------------------- */
+
+                console.error(
+                    "Booking status error:",
+                    error
+                );
+
+
+                result.innerHTML = `
+
+                    <div class="booking-result error-result">
+
+                        <h2>
+                            Unable to Check Booking ❌
+                        </h2>
+
+                        <p>
+                            Something went wrong.
+                            Please check your connection
+                            and try again.
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           ESCAPE HTML
+           Prevents API data from being rendered as HTML
+           ===================================================== */
+
+        function escapeHTML(value) {
+
+            return String(value)
+
+                .replace(/&/g, "&amp;")
+
+                .replace(/</g, "&lt;")
+
+                .replace(/>/g, "&gt;")
+
+                .replace(/"/g, "&quot;")
+
+                .replace(/'/g, "&#039;");
+        }
+
+
+
+        /* =====================================================
+           ENTER KEY SUPPORT
+           ===================================================== */
+
+        document
+            .getElementById("bookingId")
+            .addEventListener(
+                "keydown",
+                function(event) {
+
+                    if (event.key === "Enter") {
+
+                        checkBooking();
+
+                    }
+
+                }
+            );
+
+
+    </script>
+
+
+</body>
+
+</html>

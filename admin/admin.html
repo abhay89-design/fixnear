@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>FixNear Admin</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background: #1677ff;
+            color: white;
+            padding: 20px 30px;
+        }
+
+
+        .header-content {
+            max-width: 900px;
+            margin: auto;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+
+        header h1 {
+            margin: 0;
+        }
+
+
+        header p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+        }
+
+
+        .home-btn {
+            text-decoration: none;
+            background: white;
+            color: #1677ff;
+
+            padding: 10px 16px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+        }
+            .logout-btn {
+    text-decoration: none;
+    background: #e53935;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.logout-btn:hover {
+    background: #c62828;
+}
+
+
+        .home-btn:hover {
+            background: #f0f0f0;
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+
+        .container > h2 {
+            margin-bottom: 20px;
+        }
+
+
+        /* =========================
+           BOOKING CARD
+        ========================= */
+
+        .booking {
+            background: white;
+
+            padding: 22px;
+
+            margin-bottom: 20px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+
+        .booking-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .booking h3 {
+            color: #1677ff;
+
+            margin: 0 0 5px;
+        }
+
+
+        .booking-top small {
+            color: #888;
+
+            font-size: 12px;
+        }
+
+
+        .booking p {
+            margin: 10px 0;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           STATUS BADGE
+        ========================= */
+
+        .booking-status {
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+        }
+
+
+        .booking-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+
+        .booking-status.confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+
+        .booking-status.completed {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+
+        /* =========================
+           STATUS SELECT
+        ========================= */
+
+        .status {
+            margin-top: 15px;
+        }
+
+
+        select {
+            padding: 7px 10px;
+
+            margin-left: 8px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 6px;
+
+            background: white;
+        }
+
+
+        /* =========================
+           DELETE BUTTON
+        ========================= */
+
+        button {
+            margin-top: 12px;
+
+            padding: 9px 15px;
+
+            border: none;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            background: #e53935;
+
+            color: white;
+
+            font-size: 14px;
+        }
+
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+
+        /* =========================
+           EMPTY MESSAGE
+        ========================= */
+
+        .empty {
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 10px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            .header-content {
+                flex-direction: column;
+
+                text-align: center;
+            }
+
+
+            .booking-top {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+
+            .container {
+                margin: 15px auto;
+
+                padding: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header>
+
+        <div class="header-content">
+
+            <div>
+
+                <h1>
+                    FixNear Admin
+                </h1>
+
+                <p>
+                    Manage Customer Bookings
+                </p>
+
+            </div>
+
+
+            <a href="/" class="home-btn">
+                🏠 Home
+            </a>
+
+            <a href="/admin-logout"
+            class="logout-btn"> Logout </a>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <div class="container">
+
+        <h2>
+            Customer Bookings
+        </h2>
+
+
+        <div id="bookings">
+
+            <p>
+                Loading bookings...
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+
+        // =========================
+        // LOAD BOOKINGS
+        // =========================
+
+        async function loadBookings() {
+
+            try {
+
+                const response =
+                    await fetch("/api/bookings");
+
+
+                const bookings =
+                    await response.json();
+
+
+                const container =
+                    document.getElementById("bookings");
+
+
+                // No bookings
+
+                if (bookings.length === 0) {
+
+                    container.innerHTML =
+                        '<p class="empty">No bookings found.</p>';
+
+                    return;
+                }
+
+
+                // Clear loading message
+
+                container.innerHTML = "";
+
+
+                // Show every booking
+
+                bookings.forEach(booking => {
+
+
+                    container.innerHTML += `
+
+                        <div class="booking">
+
+
+                            <div class="booking-top">
+
+                                <div>
+
+                                    <h3>
+                                        ${booking.service}
+                                    </h3>
+
+                                    <small>
+                                        Booking ID:
+                                        ${booking._id}
+                                    </small>
+
+                                </div>
+
+
+                                <span class="booking-status ${booking.status.toLowerCase()}">
+
+                                    ${booking.status}
+
+                                </span>
+
+                            </div>
+
+
+                            <p>
+
+                                <strong>
+                                    Name:
+                                </strong>
+
+                                ${booking.name}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Phone:
+                                </strong>
+
+                                ${booking.phone}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Address:
+                                </strong>
+
+                                ${booking.address}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Date:
+                                </strong>
+
+                                ${booking.date}
+
+                            </p>
+
+
+                            <p class="status">
+
+                                <strong>
+                                    Status:
+                                </strong>
+
+
+                                <select
+                                    onchange="updateStatus(
+                                        '${booking._id}',
+                                        this.value
+                                    )"
+                                >
+
+                                    <option
+                                        value="Pending"
+                                        ${booking.status === "Pending"
+                                            ? "selected"
+                                            : ""}
+                                    >
+                                        Pending
+                                    </option>
+
+
+                                    <option
+                                        value="Confirmed"
+                                        ${booking.status === "Confirmed"
+                                            ? "selected"
+                                            : ""}
+                                    >
+                                        Confirmed
+                                    </option>
+
+
+                                    <option
+                                        value="Completed"
+                                        ${booking.status === "Completed"
+                                            ? "selected"
+                                            : ""}
+                                    >
+                                        Completed
+                                    </option>
+
+                                </select>
+
+                            </p>
+
+
+                            <button
+                                onclick="deleteBooking(
+                                    '${booking._id}'
+                                )"
+                            >
+
+                                Delete Booking
+
+                            </button>
+
+
+                        </div>
+
+                    `;
+
+                });
+
+
+            } catch (error) {
+
+                console.log(error);
+
+
+                document.getElementById("bookings").innerHTML =
+                    "<p>Unable to load bookings.</p>";
+
+            }
+
+        }
+
+
+
+        // =========================
+        // UPDATE STATUS
+        // =========================
+
+        async function updateStatus(id, status) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/api/bookings/${id}/status`,
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                status: status
+                            })
+                        }
+                    );
+
+
+                if (response.ok) {
+
+                    alert(
+                        "Status updated successfully! ✅"
+                    );
+
+
+                    // Reload booking list
+
+                    loadBookings();
+
+                } else {
+
+                    alert(
+                        "Status update failed!"
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.log(error);
+
+
+                alert(
+                    "Something went wrong!"
+                );
+
+            }
+
+        }
+
+
+
+        // =========================
+        // DELETE BOOKING
+        // =========================
+
+        async function deleteBooking(id) {
+
+
+            const confirmDelete =
+                confirm(
+                    "Are you sure you want to delete this booking?"
+                );
+
+
+            if (!confirmDelete) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/api/bookings/${id}`,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                if (response.ok) {
+
+                    alert(
+                        "Booking deleted successfully! ✅"
+                    );
+
+
+                    // Reload bookings
+
+                    loadBookings();
+
+                } else {
+
+                    const result =
+                        await response.json();
+
+
+                    alert(
+                        result.message ||
+                        "Delete failed!"
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.log(error);
+
+
+                alert(
+                    "Something went wrong!"
+                );
+
+            }
+
+        }
+
+
+
+        // =========================
+        // START
+        // =========================
+
+        loadBookings();
+
+
+    </script>
+
+
+</body>
+
+</html>
