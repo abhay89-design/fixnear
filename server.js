@@ -111,7 +111,11 @@ mongoose.connect(process.env.MONGO_URI, {
 // PUBLIC FOLDER
 // ========================================
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/booking.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "booking.html"));
+});
 
 
 // ========================================
