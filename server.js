@@ -7,7 +7,7 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 
 const Booking = require("./models/Booking");
-const User = require("./models/User");
+const User = require("./models/user");
 
 const app = express();
 
