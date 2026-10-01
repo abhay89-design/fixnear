@@ -1740,26 +1740,101 @@ footer p {
             68px;
 
         padding:
-            0 5%;
+            0 3%;
+
+        gap:
+            8px;
+
+        overflow:
+            hidden;
+    }
+
+    .logo {
+        flex-shrink:
+            0;
     }
 
     nav {
         gap:
-            8px;
+            7px;
+
+        flex: 1;
+
+        min-width:
+            0;
+
+        overflow-x:
+            auto;
+
+        overflow-y:
+            hidden;
+
+        white-space:
+            nowrap;
+
+        scrollbar-width:
+            none;
+
+        -webkit-overflow-scrolling:
+            touch;
     }
 
-    nav a:not(.nav-btn):not(.admin-btn) {
+    nav::-webkit-scrollbar {
         display:
             none;
     }
 
-    .nav-btn,
-    .admin-btn {
-        padding:
-            10px 14px;
+    /* Keep Home and Services hidden on small screens,
+       but keep Book Service, Login, Register and Admin Login visible. */
+    nav a[href="/"],
+    nav a[href="#services"] {
+        display:
+            none;
+    }
+
+    nav a {
+        display:
+            inline-block;
+
+        flex-shrink:
+            0;
 
         font-size:
-            13px;
+            12px;
+    }
+
+    .nav-btn,
+    .admin-btn,
+    nav a[href="/login.html"],
+    nav a[href="/register.html"],
+    nav a[href="/admin-login.html"] {
+        padding:
+            9px 11px;
+
+        font-size:
+            12px;
+
+        border-radius:
+            9px;
+    }
+
+    /* Make Login and Register easy to tap on mobile */
+    nav a[href="/login.html"],
+    nav a[href="/register.html"] {
+        color:
+            var(--primary);
+
+        padding:
+            9px 10px;
+
+        border:
+            1px solid rgba(22,119,255,.18);
+
+        border-radius:
+            9px;
+
+        background:
+            rgba(255,255,255,.75);
     }
 
     .hero {
@@ -1824,7 +1899,29 @@ footer p {
 
     .header {
         padding:
-            0 4%;
+            0 3%;
+    }
+
+    nav {
+        gap:
+            5px;
+    }
+
+    nav a {
+        font-size:
+            11px;
+    }
+
+    .nav-btn,
+    .admin-btn,
+    nav a[href="/login.html"],
+    nav a[href="/register.html"],
+    nav a[href="/admin-login.html"] {
+        padding:
+            8px 9px;
+
+        font-size:
+            11px;
     }
 
     .service-container {
