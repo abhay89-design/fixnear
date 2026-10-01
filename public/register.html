@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FixNear - Register</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: linear-gradient(
+                135deg,
+                #06152d,
+                #0b3b70,
+                #007bff,
+                #00bcd4
+            );
+
+            background-size: 400% 400%;
+            animation: gradientMove 12s ease infinite;
+        }
+
+        /* =========================
+           ANIMATED BACKGROUND
+        ========================= */
+
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.5;
+            filter: blur(2px);
+
+            animation: float 7s ease-in-out infinite;
+        }
+
+        .blob.one {
+            width: 300px;
+            height: 300px;
+
+            background: #00e5ff;
+
+            top: -100px;
+            left: -100px;
+        }
+
+        .blob.two {
+            width: 350px;
+            height: 350px;
+
+            background: #7c4dff;
+
+            right: -120px;
+            bottom: -120px;
+
+            animation-delay: 2s;
+        }
+
+        .blob.three {
+            width: 180px;
+            height: 180px;
+
+            background: #00ff88;
+
+            right: 15%;
+            top: 10%;
+
+            animation-delay: 4s;
+        }
+
+        /* =========================
+           REGISTER CARD
+        ========================= */
+
+        .register-container {
+            position: relative;
+
+            width: 90%;
+            max-width: 430px;
+
+            padding: 35px;
+
+            background: rgba(255, 255, 255, 0.14);
+
+            border: 1px solid rgba(255, 255, 255, 0.25);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.3);
+
+            color: white;
+
+            animation: cardEnter 0.9s ease forwards;
+        }
+
+        /* =========================
+           LOGO
+        ========================= */
+
+        .logo {
+            text-align: center;
+
+            font-size: 36px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 8px;
+
+            animation: logoPop 1s ease;
+        }
+
+        .logo span {
+            color: #7ee8ff;
+        }
+
+        .subtitle {
+            text-align: center;
+
+            color: rgba(255,255,255,0.75);
+
+            margin-bottom: 25px;
+
+            font-size: 14px;
+        }
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+            margin-bottom: 16px;
+
+            animation: inputEnter 0.8s ease both;
+        }
+
+        .form-group:nth-child(1) {
+            animation-delay: 0.15s;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.25s;
+        }
+
+        .form-group:nth-child(3) {
+            animation-delay: 0.35s;
+        }
+
+        .form-group:nth-child(4) {
+            animation-delay: 0.45s;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-box span {
+            position: absolute;
+
+            left: 14px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 18px;
+
+            opacity: 0.7;
+
+            pointer-events: none;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 13px 14px 13px 45px;
+
+            color: white;
+
+            background: rgba(255,255,255,0.12);
+
+            border: 1px solid rgba(255,255,255,0.25);
+
+            border-radius: 12px;
+
+            outline: none;
+
+            font-size: 15px;
+
+            transition: 0.3s;
+        }
+
+        input::placeholder {
+            color: rgba(255,255,255,0.55);
+        }
+
+        input:focus {
+            border-color: #6ee7ff;
+
+            background: rgba(255,255,255,0.18);
+
+            box-shadow:
+                0 0 0 3px rgba(0,225,255,0.12);
+
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           REGISTER BUTTON
+        ========================= */
+
+        .register-btn {
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 5px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            color: #06203d;
+
+            background: linear-gradient(
+                135deg,
+                #ffffff,
+                #8eeeff
+            );
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            position: relative;
+
+            overflow: hidden;
+
+            transition: 0.3s;
+
+            animation: buttonEnter 0.9s ease 0.6s both;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 10px 25px rgba(0,225,255,0.35);
+        }
+
+        .register-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* =========================
+           MESSAGE
+        ========================= */
+
+        .message {
+            text-align: center;
+
+            margin-top: 14px;
+
+            font-size: 14px;
+
+            min-height: 20px;
+        }
+
+        /* =========================
+           LOGIN LINK
+        ========================= */
+
+        .login-link {
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: rgba(255,255,255,0.75);
+
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #8eeeff;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            transition: 0.3s;
+        }
+
+        .login-link a:hover {
+            color: white;
+
+            text-shadow:
+                0 0 10px #8eeeff;
+        }
+
+        .back-home {
+            display: block;
+
+            text-align: center;
+
+            margin-top: 15px;
+
+            color: rgba(255,255,255,0.65);
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            transition: 0.3s;
+        }
+
+        .back-home:hover {
+            color: white;
+
+            transform: translateX(-3px);
+        }
+
+        /* =========================
+           ANIMATIONS
+        ========================= */
+
+        @keyframes gradientMove {
+
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes float {
+
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(30px, -40px) scale(1.08);
+            }
+        }
+
+        @keyframes cardEnter {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(60px)
+                    scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+        @keyframes logoPop {
+
+            0% {
+                opacity: 0;
+
+                transform: scale(0.5);
+            }
+
+            70% {
+                transform: scale(1.08);
+            }
+
+            100% {
+                opacity: 1;
+
+                transform: scale(1);
+            }
+        }
+
+        @keyframes inputEnter {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateX(0);
+            }
+        }
+
+        @keyframes buttonEnter {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 480px) {
+
+            .register-container {
+                padding: 28px 22px;
+            }
+
+            .logo {
+                font-size: 30px;
+            }
+
+            input {
+                padding-top: 12px;
+                padding-bottom: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Animated Background -->
+
+    <div class="blob one"></div>
+    <div class="blob two"></div>
+    <div class="blob three"></div>
+
+
+    <!-- Register Card -->
+
+    <div class="register-container">
+
+        <div class="logo">
+            Fix<span>Near</span>
+        </div>
+
+        <p class="subtitle">
+            Create your account to get started
+        </p>
+
+
+        <form id="registerForm">
+
+            <!-- Name -->
+
+            <div class="form-group">
+
+                <label>Full Name</label>
+
+                <div class="input-box">
+
+                    <span>👤</span>
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter your full name"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="form-group">
+
+                <label>Email</label>
+
+                <div class="input-box">
+
+                    <span>📧</span>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Password -->
+
+            <div class="form-group">
+
+                <label>Password</label>
+
+                <div class="input-box">
+
+                    <span>🔒</span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Create a password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Confirm Password -->
+
+            <div class="form-group">
+
+                <label>Confirm Password</label>
+
+                <div class="input-box">
+
+                    <span>🔐</span>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm your password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="register-btn"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+
+        <div
+            id="message"
+            class="message">
+        </div>
+
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="login.html">
+                Login
+            </a>
+
+        </div>
+
+
+        <a
+            href="index.html"
+            class="back-home">
+
+            ← Back to Home
+
+        </a>
+
+    </div>
+
+
+    <script>
+
+        document
+        .getElementById("registerForm")
+        .addEventListener("submit", async function(e) {
+
+            e.preventDefault();
+
+
+            const name =
+                document.getElementById("name").value.trim();
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const password =
+                document.getElementById("password").value;
+
+            const confirmPassword =
+                document.getElementById("confirmPassword").value;
+
+
+            const message =
+                document.getElementById("message");
+
+
+            /* Password Match */
+
+            if (password !== confirmPassword) {
+
+                message.style.color = "#ff6b6b";
+
+                message.textContent =
+                    "Passwords do not match!";
+
+                return;
+            }
+
+
+            /* Loading */
+
+            message.style.color = "#8eeeff";
+
+            message.textContent =
+                "Creating your account...";
+
+
+            try {
+
+                const response = await fetch(
+                    "/api/register",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            name: name,
+
+                            email: email,
+
+                            password: password
+
+                        })
+                    }
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                /* Success */
+
+                if (response.ok) {
+
+                    message.style.color =
+                        "#00ff9d";
+
+                    message.textContent =
+                        "✓ Account created successfully!";
+
+
+                    setTimeout(() => {
+
+                        window.location.href =
+                            "login.html";
+
+                    }, 1200);
+
+                }
+
+
+                /* Error */
+
+                else {
+
+                    message.style.color =
+                        "#ff6b6b";
+
+                    message.textContent =
+                        data.message ||
+                        "Registration failed.";
+
+                }
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.style.color =
+                    "#ff6b6b";
+
+                message.textContent =
+                    "Server error. Please try again.";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
