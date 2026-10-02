@@ -10,6 +10,9 @@ const Booking = require("./models/Booking");
 const User = require("./models/user");
 
 const app = express();
+const app = express();
+
+app.set("trust proxy", 1);
 
 
 // ========================================
