@@ -3,13 +3,41 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const nodemailer = require("nodemailer");
 const path = require("path");
 const bcrypt = require("bcryptjs");
+
 
 const Booking = require("./models/Booking");
 const Worker = require("./models/Worker");
 const User = require("./models/user");
 
+// ================= EMAIL SETUP =================
+
+const emailTransporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
+// ================= EMAIL NOTIFICATION =================
+
+async function sendAdminEmail(subject, message) {
+    try {
+        await emailTransporter.sendMail({
+            from: `"FixNear" <${process.env.EMAIL_USER}>`,
+            to: process.env.ADMIN_EMAIL,
+            subject: subject,
+            text: message
+        });
+
+        console.log("Admin email sent successfully!");
+    } catch (error) {
+        console.error("Admin email error:", error.message);
+    }
+}
 const app = express();
 app.get("/", (req, res) => {
     res.redirect("/login.html");
@@ -537,6 +565,22 @@ app.post(
 
 
             await booking.save();
+
+            await sendAdminEmail(
+    "📦 New FixNear Booking",
+    `
+New Customer Booking Received
+
+Customer Name: ${booking.name}
+Phone: ${booking.phone}
+Service: ${booking.service}
+Address: ${booking.address}
+Date: ${booking.date}
+
+Booking Status: ${booking.status}
+Booking ID: ${booking._id}
+`
+);
 
 
             console.log(
@@ -1093,6 +1137,27 @@ app.post("/api/worker/register", async (req, res) => {
         });
 
         await worker.save();
+
+        await sendAdminEmail(
+    "🧑‍🔧 New FixNear Worker Application",
+    `
+New Worker Application Received
+
+Name: ${worker.name}
+Phone: ${worker.phone}
+Email: ${worker.email}
+Service: ${worker.service}
+Experience: ${worker.experience}
+Work Area: ${worker.area}
+Address: ${worker.address}
+
+About Work:
+${worker.about}
+
+Application Status: ${worker.status}
+Worker ID: ${worker._id}
+`
+);
 
         res.status(201).json({
             success: true,
