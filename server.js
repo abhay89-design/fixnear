@@ -566,6 +566,8 @@ app.post(
 
             await booking.save();
 
+            console.log("Booking saved successfully!");
+
             await sendAdminEmail(
     "📦 New FixNear Booking",
     `
