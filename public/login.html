@@ -390,6 +390,128 @@
                 font-size: 30px;
             }
         }
+        /* Worker Join Section */
+.worker-link {
+    text-align: center;
+    margin-top: 22px;
+    animation: workerEnter 1s ease 0.8s both;
+}
+
+.worker-link span {
+    display: block;
+    color: rgba(255,255,255,0.75);
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+/* Animated Worker Button */
+.worker-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    padding: 11px 22px;
+    border-radius: 12px;
+
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+
+    background: linear-gradient(
+        135deg,
+        #00c853,
+        #00e5ff,
+        #7c4dff
+    );
+
+    background-size: 200% 200%;
+    animation: workerGradient 4s ease infinite;
+
+    box-shadow: 0 0 0 rgba(0,255,180,0);
+    transition: 0.35s ease;
+    overflow: hidden;
+}
+
+/* Shine animation */
+.worker-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+
+    width: 70%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.45),
+        transparent
+    );
+
+    transform: skewX(-20deg);
+    animation: workerShine 3s infinite;
+}
+
+/* Hover */
+.worker-btn:hover {
+    transform: translateY(-4px) scale(1.03);
+
+    box-shadow:
+        0 10px 30px rgba(0,255,200,0.35),
+        0 0 20px rgba(0,229,255,0.25);
+}
+
+/* Click */
+.worker-btn:active {
+    transform: scale(0.96);
+}
+
+/* Entry animation */
+@keyframes workerEnter {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Gradient animation */
+@keyframes workerGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Shine animation */
+@keyframes workerShine {
+    0% {
+        left: -100%;
+    }
+
+    45% {
+        left: 130%;
+    }
+
+    100% {
+        left: 130%;
+    }
+}
     </style>
 </head>
 
@@ -474,6 +596,13 @@
             </a>
 
         </div>
+
+        <div class="worker-link">
+         Want to work with FixNear?
+        <a href="worker-register.html">
+        Join as a Worker
+        </a>
+     </div>
 
 
         <a href="index.html" class="back-home">
