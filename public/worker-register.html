@@ -232,6 +232,12 @@
             transform: scale(0.97);
         }
 
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* Login Link */
         .login-link {
             text-align: center;
@@ -545,13 +551,129 @@
 
         document
             .getElementById("workerForm")
-            .addEventListener("submit", function(e) {
+            .addEventListener("submit", async function(e) {
 
                 e.preventDefault();
 
-                alert(
-                    "Worker application form is ready! Backend connection will be added next."
-                );
+                const workerData = {
+
+                    name: document
+                        .getElementById("name")
+                        .value
+                        .trim(),
+
+                    phone: document
+                        .getElementById("phone")
+                        .value
+                        .trim(),
+
+                    email: document
+                        .getElementById("email")
+                        .value
+                        .trim(),
+
+                    service: document
+                        .getElementById("service")
+                        .value,
+
+                    experience: document
+                        .getElementById("experience")
+                        .value,
+
+                    area: document
+                        .getElementById("area")
+                        .value
+                        .trim(),
+
+                    address: document
+                        .getElementById("address")
+                        .value
+                        .trim(),
+
+                    about: document
+                        .getElementById("about")
+                        .value
+                        .trim()
+                };
+
+
+                const submitButton =
+                    document.querySelector(".submit-btn");
+
+                const originalText =
+                    submitButton.innerHTML;
+
+
+                try {
+
+                    submitButton.disabled = true;
+
+                    submitButton.innerHTML =
+                        "⏳ Submitting Application...";
+
+
+                    const response = await fetch(
+                        "/api/worker/register",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(workerData)
+                        }
+                    );
+
+
+                    const result =
+                        await response.json();
+
+
+                    if (response.ok) {
+
+                        alert(
+                            "✅ " +
+                            result.message
+                        );
+
+                        document
+                            .getElementById("workerForm")
+                            .reset();
+
+                    } else {
+
+                        alert(
+                            "❌ " +
+                            (
+                                result.message ||
+                                "Application could not be submitted."
+                            )
+                        );
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Worker registration error:",
+                        error
+                    );
+
+                    alert(
+                        "❌ Unable to submit application. Please try again."
+                    );
+
+                } finally {
+
+                    submitButton.disabled = false;
+
+                    submitButton.innerHTML =
+                        originalText;
+
+                }
 
             });
 
