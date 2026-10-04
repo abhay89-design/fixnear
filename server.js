@@ -877,6 +877,162 @@ app.delete(
     }
 );
 
+// ========================================
+// GET ALL WORKER APPLICATIONS
+// ========================================
+
+app.get(
+    "/api/workers",
+    requireAdmin,
+    async (req, res) => {
+
+        try {
+
+            const workers =
+                await Worker.find()
+                    .sort({
+                        createdAt: -1
+                    });
+
+            res.json(workers);
+
+        } catch (error) {
+
+            console.log(
+                "Worker fetch error:",
+                error.message
+            );
+
+            res.status(500).json({
+
+                message:
+                    "Unable to fetch worker applications"
+
+            });
+
+        }
+
+    }
+);
+
+
+// ========================================
+// UPDATE WORKER STATUS
+// ========================================
+
+app.put(
+    "/api/workers/:id/status",
+    requireAdmin,
+    async (req, res) => {
+
+        try {
+
+            const worker =
+                await Worker.findByIdAndUpdate(
+
+                    req.params.id,
+
+                    {
+                        status:
+                            req.body.status
+                    },
+
+                    {
+                        new: true
+                    }
+
+                );
+
+
+            if (!worker) {
+
+                return res.status(404).json({
+
+                    message:
+                        "Worker application not found"
+
+                });
+
+            }
+
+
+            res.json(worker);
+
+        } catch (error) {
+
+            console.log(
+                "Worker status update error:",
+                error.message
+            );
+
+            res.status(500).json({
+
+                message:
+                    "Worker status update failed"
+
+            });
+
+        }
+
+    }
+);
+
+
+// ========================================
+// DELETE WORKER APPLICATION
+// ========================================
+
+app.delete(
+    "/api/workers/:id",
+    requireAdmin,
+    async (req, res) => {
+
+        try {
+
+            const worker =
+                await Worker.findByIdAndDelete(
+                    req.params.id
+                );
+
+
+            if (!worker) {
+
+                return res.status(404).json({
+
+                    message:
+                        "Worker application not found"
+
+                });
+
+            }
+
+
+            res.json({
+
+                message:
+                    "Worker application deleted successfully"
+
+            });
+
+        } catch (error) {
+
+            console.log(
+                "Worker delete error:",
+                error.message
+            );
+
+            res.status(500).json({
+
+                message:
+                    "Worker delete failed"
+
+            });
+
+        }
+
+    }
+);
+
 
 // ========================================
 // START SERVER
