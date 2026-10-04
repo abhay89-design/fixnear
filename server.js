@@ -7,6 +7,7 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 
 const Booking = require("./models/Booking");
+const Worker = require("./models/Worker");
 const User = require("./models/user");
 
 const app = express();
@@ -883,6 +884,75 @@ app.delete(
 
 const PORT =
     process.env.PORT || 3000;
+
+    // ================= WORKER REGISTRATION =================
+
+app.post("/api/worker/register", async (req, res) => {
+    try {
+        const {
+            name,
+            phone,
+            email,
+            service,
+            experience,
+            area,
+            address,
+            about
+        } = req.body;
+
+        if (
+            !name ||
+            !phone ||
+            !email ||
+            !service ||
+            !experience ||
+            !area ||
+            !address ||
+            !about
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "Please fill all fields."
+            });
+        }
+
+        const existingWorker = await Worker.findOne({ email });
+
+        if (existingWorker) {
+            return res.status(400).json({
+                success: false,
+                message: "Worker application already exists with this email."
+            });
+        }
+
+        const worker = new Worker({
+            name,
+            phone,
+            email,
+            service,
+            experience,
+            area,
+            address,
+            about
+        });
+
+        await worker.save();
+
+        res.status(201).json({
+            success: true,
+            message: "Worker application submitted successfully!",
+            workerId: worker._id
+        });
+
+    } catch (error) {
+        console.error("Worker registration error:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "Server error. Please try again later."
+        });
+    }
+});
 
 
 app.listen(
