@@ -305,7 +305,7 @@
                 </h1>
 
                 <p>
-                    Manage Customer Bookings
+                    Manage Customer Bookings & Worker Applications
                 </p>
 
             </div>
@@ -342,6 +342,26 @@
             </p>
 
         </div>
+
+        <!-- =========================
+     WORKER APPLICATIONS
+========================= -->
+
+<div class="worker-section">
+
+    <h2>
+        🧑‍🔧 Worker Applications
+    </h2>
+
+    <div id="workers">
+
+        <p>
+            Loading worker applications...
+        </p>
+
+    </div>
+
+</div>
 
     </div>
 
@@ -682,6 +702,304 @@
         // =========================
 
         loadBookings();
+
+        // =========================
+// LOAD WORKER APPLICATIONS
+// =========================
+
+async function loadWorkers() {
+
+    try {
+
+        const response =
+            await fetch("/api/workers");
+
+        if (!response.ok) {
+            throw new Error("Unable to fetch workers");
+        }
+
+        const workers =
+            await response.json();
+
+        const container =
+            document.getElementById("workers");
+
+
+        // No applications
+
+        if (workers.length === 0) {
+
+            container.innerHTML =
+                '<p class="empty">No worker applications found.</p>';
+
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        // Show workers
+
+        workers.forEach(worker => {
+
+            const statusClass =
+                worker.status.toLowerCase();
+
+
+            container.innerHTML += `
+
+                <div class="worker-card">
+
+                    <div class="worker-top">
+
+                        <div>
+
+                            <h3>
+                                🧑‍🔧 ${worker.name}
+                            </h3>
+
+                            <small>
+                                Application ID:
+                                ${worker._id}
+                            </small>
+
+                        </div>
+
+
+                        <span class="worker-status ${statusClass}">
+                            ${worker.status}
+                        </span>
+
+                    </div>
+
+
+                    <p>
+                        <strong>📱 Phone:</strong>
+                        ${worker.phone}
+                    </p>
+
+
+                    <p>
+                        <strong>📧 Email:</strong>
+                        ${worker.email}
+                    </p>
+
+
+                    <p>
+                        <strong>🔧 Service:</strong>
+                        ${worker.service}
+                    </p>
+
+
+                    <p>
+                        <strong>⭐ Experience:</strong>
+                        ${worker.experience}
+                    </p>
+
+
+                    <p>
+                        <strong>📍 Work Area:</strong>
+                        ${worker.area}
+                    </p>
+
+
+                    <p>
+                        <strong>🏠 Address:</strong>
+                        ${worker.address}
+                    </p>
+
+
+                    <p>
+                        <strong>📝 About:</strong>
+                        ${worker.about}
+                    </p>
+
+
+                    <div class="worker-actions">
+
+                        <button
+                            class="approve-btn"
+                            onclick="updateWorkerStatus(
+                                '${worker._id}',
+                                'Approved'
+                            )"
+                        >
+                            ✅ Approve
+                        </button>
+
+
+                        <button
+                            class="reject-btn"
+                            onclick="updateWorkerStatus(
+                                '${worker._id}',
+                                'Rejected'
+                            )"
+                        >
+                            ❌ Reject
+                        </button>
+
+
+                        <button
+                            class="delete-worker-btn"
+                            onclick="deleteWorker(
+                                '${worker._id}'
+                            )"
+                        >
+                            🗑️ Delete
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+
+    } catch (error) {
+
+        console.log(error);
+
+        document.getElementById("workers").innerHTML =
+            "<p>Unable to load worker applications.</p>";
+
+    }
+
+}
+
+
+
+// =========================
+// UPDATE WORKER STATUS
+// =========================
+
+async function updateWorkerStatus(id, status) {
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/workers/${id}/status`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        status: status
+                    })
+                }
+            );
+
+
+        if (response.ok) {
+
+            alert(
+                `Worker ${status.toLowerCase()} successfully! ✅`
+            );
+
+            loadWorkers();
+
+        } else {
+
+            const result =
+                await response.json();
+
+            alert(
+                result.message ||
+                "Status update failed!"
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.log(error);
+
+        alert(
+            "Something went wrong!"
+        );
+
+    }
+
+}
+
+
+
+// =========================
+// DELETE WORKER
+// =========================
+
+async function deleteWorker(id) {
+
+    const confirmDelete =
+        confirm(
+            "Are you sure you want to delete this worker application?"
+        );
+
+
+    if (!confirmDelete) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/workers/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        if (response.ok) {
+
+            alert(
+                "Worker application deleted successfully! ✅"
+            );
+
+            loadWorkers();
+
+        } else {
+
+            const result =
+                await response.json();
+
+            alert(
+                result.message ||
+                "Delete failed!"
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.log(error);
+
+        alert(
+            "Something went wrong!"
+        );
+
+    }
+
+}
+
+
+
+// =========================
+// LOAD WORKERS
+// =========================
+
+loadWorkers();
 
 
     </script>
