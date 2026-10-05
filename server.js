@@ -57,9 +57,9 @@ async function sendAdminEmail(subject, message) {
     try {
         const result = await brevo.transactionalEmails.sendTransacEmail({
             sender: {
-                name: "FixNear",
-                email: process.env.EMAIL_USER
-            },
+                      name: "FixNear",
+                      email: "abhayvermaverma897@gmail.com"
+                   },
             to: [
                 {
                     email: process.env.ADMIN_EMAIL
