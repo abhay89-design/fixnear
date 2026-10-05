@@ -599,24 +599,7 @@ app.post(
 
 
             await booking.save();
-            await sendAdminEmail(
-    "📦 New FixNear Booking",
-    `
-New Customer Booking Received
-
-Customer Name: ${booking.name}
-Phone: ${booking.phone}
-Service: ${booking.service}
-Address: ${booking.address}
-Date: ${booking.date}
-
-Booking Status: ${booking.status}
-Booking ID: ${booking._id}
-`
-);
-
-            console.log("Booking saved successfully!");
-
+          
             await sendAdminEmail(
     "📦 New FixNear Booking",
     `
