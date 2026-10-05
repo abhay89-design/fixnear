@@ -15,16 +15,21 @@ const User = require("./models/user");
 // ================= EMAIL SETUP =================
 
 const emailTransporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000
-});
 
+    family: 4,
+
+    connectionTimeout: 30000,
+    greetingTimeout: 30000,
+    socketTimeout: 30000
+});
 // Check email connection
 emailTransporter.verify((error, success) => {
     if (error) {
