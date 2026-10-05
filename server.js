@@ -17,7 +17,7 @@ const User = require("./models/user");
 // ================= EMAIL SETUP =================
 
 // ================= BREVO EMAIL SETUP =================
-
+console.log("BREVO_API_KEY exists:", !!process.env.BREVO_API_KEY);
 const brevo = new BrevoClient({
     apiKey: process.env.BREVO_API_KEY
 });
