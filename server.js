@@ -1,4 +1,6 @@
 require("dotenv").config();
+const dns = require("dns");
+dns.setDefaultResultOrder("ipv4first");
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -23,8 +25,6 @@ const emailTransporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-
-    family: 4,
 
     connectionTimeout: 30000,
     greetingTimeout: 30000,
