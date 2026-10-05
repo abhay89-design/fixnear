@@ -1169,8 +1169,10 @@ app.post("/api/worker/register", async (req, res) => {
             address,
             about
         });
+        
 
         await worker.save();
+        console.log("Sender email exists:", !!process.env.EMAIL_USER);
 
          sendAdminEmail(
     "🧑‍🔧 New FixNear Worker Application",
