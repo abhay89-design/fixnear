@@ -19,8 +19,21 @@ const emailTransporter = nodemailer.createTransport({
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
+    },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 10000
+});
+
+// Check email connection
+emailTransporter.verify((error, success) => {
+    if (error) {
+        console.error("❌ Email connection failed:", error.message);
+    } else {
+        console.log("✅ Email server connected successfully!");
     }
 });
+
 
 // ================= EMAIL NOTIFICATION =================
 
@@ -33,9 +46,10 @@ async function sendAdminEmail(subject, message) {
             text: message
         });
 
-        console.log("Admin email sent successfully!");
+        console.log("✅ Admin email sent successfully!");
+
     } catch (error) {
-        console.error("Admin email error:", error.message);
+        console.error("❌ Admin email error:", error.message);
     }
 }
 const app = express();
@@ -568,7 +582,7 @@ app.post(
 
             console.log("Booking saved successfully!");
 
-            await sendAdminEmail(
+             sendAdminEmail(
     "📦 New FixNear Booking",
     `
 New Customer Booking Received
@@ -1140,7 +1154,7 @@ app.post("/api/worker/register", async (req, res) => {
 
         await worker.save();
 
-        await sendAdminEmail(
+         sendAdminEmail(
     "🧑‍🔧 New FixNear Worker Application",
     `
 New Worker Application Received
