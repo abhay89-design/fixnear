@@ -5,7 +5,7 @@ dns.setDefaultResultOrder("ipv4first");
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
-const nodemailer = require("nodemailer");
+const { BrevoClient } = require("@getbrevo/brevo");
 const path = require("path");
 const bcrypt = require("bcryptjs");
 
@@ -16,52 +16,67 @@ const User = require("./models/user");
 
 // ================= EMAIL SETUP =================
 
-const emailTransporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+// ================= BREVO EMAIL SETUP =================
 
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-
-    connectionTimeout: 30000,
-    greetingTimeout: 30000,
-    socketTimeout: 30000
+const brevo = new BrevoClient({
+    apiKey: process.env.BREVO_API_KEY
 });
-// Check email connection
-emailTransporter.verify((error, success) => {
-    if (error) {
-        console.error("❌ Email connection failed:", error.message);
-    } else {
-        console.log("✅ Email server connected successfully!");
+
+// ================= EMAIL NOTIFICATION =================
+
+async function sendAdminEmail(subject, message) {
+    try {
+        const result = await brevo.transactionalEmails.sendTransacEmail({
+            sender: {
+                name: "FixNear",
+                email: process.env.EMAIL_USER
+            },
+
+            to: [
+                {
+                    email: process.env.ADMIN_EMAIL
+                }
+            ],
+
+            subject: subject,
+            textContent: message
+        });
+
+        console.log("✅ Admin email sent successfully!");
+        console.log("Brevo Message ID:", result.messageId);
+
+    } catch (error) {
+        console.error("❌ Brevo email error:", error.message);
     }
-});
+}
 
 
 // ================= EMAIL NOTIFICATION =================
 
 async function sendAdminEmail(subject, message) {
     try {
-        await emailTransporter.sendMail({
-            from: `"FixNear" <${process.env.EMAIL_USER}>`,
-            to: process.env.ADMIN_EMAIL,
+        const result = await brevo.transactionalEmails.sendTransacEmail({
+            sender: {
+                name: "FixNear",
+                email: process.env.EMAIL_USER
+            },
+            to: [
+                {
+                    email: process.env.ADMIN_EMAIL
+                }
+            ],
             subject: subject,
-            text: message
+            textContent: message
         });
 
         console.log("✅ Admin email sent successfully!");
+        console.log("Brevo Message ID:", result.messageId);
 
     } catch (error) {
-        console.error("❌ Admin email error:", error.message);
+        console.error("❌ Brevo email error:", error.message);
     }
 }
 const app = express();
-app.get("/", (req, res) => {
-    res.redirect("/login.html");
-});
-
 app.set("trust proxy", 1);
 
 
@@ -584,10 +599,25 @@ app.post(
 
 
             await booking.save();
+            await sendAdminEmail(
+    "📦 New FixNear Booking",
+    `
+New Customer Booking Received
+
+Customer Name: ${booking.name}
+Phone: ${booking.phone}
+Service: ${booking.service}
+Address: ${booking.address}
+Date: ${booking.date}
+
+Booking Status: ${booking.status}
+Booking ID: ${booking._id}
+`
+);
 
             console.log("Booking saved successfully!");
 
-             sendAdminEmail(
+            await sendAdminEmail(
     "📦 New FixNear Booking",
     `
 New Customer Booking Received
