@@ -26,6 +26,11 @@ const bookingSchema = new mongoose.Schema({
         required: true
     },
 
+    priority: {
+    type: String,
+    default: "Normal"
+    },
+
     status: {
         type: String,
         default: "Pending"

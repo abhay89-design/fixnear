@@ -4,6 +4,7 @@ dns.setDefaultResultOrder("ipv4first");
 
 const express = require("express");
 const mongoose = require("mongoose");
+const { GoogleGenAI } = require("@google/genai");
 const session = require("express-session");
 const { BrevoClient } = require("@getbrevo/brevo");
 const path = require("path");
@@ -78,6 +79,14 @@ async function sendAdminEmail(subject, message) {
 }
 const app = express();
 app.set("trust proxy", 1);
+// ================= GEMINI AI SETUP =================
+const gemini = process.env.GEMINI_API_KEY
+    ? new GoogleGenAI({
+        apiKey: process.env.GEMINI_API_KEY
+      })
+    : null;
+
+console.log("Gemini API key configured:", !!gemini);
 
 
 // ========================================
@@ -1115,6 +1124,60 @@ app.delete(
 // ========================================
 // START SERVER
 // ========================================
+
+
+app.post("/api/ai-assistant", async (req, res) => {
+    console.log("AI ROUTE HIT");
+    try {
+        if (!gemini) {
+            return res.status(503).json({
+                reply: "AI abhi available nahi hai. Baad mein try karein."
+            });
+        }
+
+        const issue = req.body;
+
+        if (
+            typeof issue !== "string" ||
+            !issue.trim() ||
+            issue.length > 500
+        ) {
+            return res.status(400).json({
+                reply: "Apni repair problem 500 characters ke andar likhein."
+            });
+        }
+
+        console.log("Customer issue received:", issue);
+
+        const result = await gemini.models.generateContent({
+            model: "gemini-3.8-flash",
+            contents: `You are FixNear's home repair assistant in India.
+Reply in simple Hindi or Hinglish.
+Available services: Electrician, Plumber, AC Repair, Cleaning.
+Help the customer identify a suitable service.
+Never claim a booking is completed.
+For dangerous electrical or gas problems, advise the customer to stay away and contact a qualified professional.
+Customer's issue: ${issue.trim()}`,
+            config: {
+                maxOutputTokens: 300
+            }
+        });
+
+        console.log("Gemini full reply:", result.text);
+
+        res.json({
+            reply: result.text || "Abhi jawab nahi mil paya."
+        });
+
+    } catch (error) {
+        console.error("Gemini assistant error:", error);
+
+        res.status(503).json({
+            reply: "AI abhi busy hai. Thodi der baad try karein."
+        });
+    }
+});
+
 
 const PORT =
     process.env.PORT || 3000;

@@ -12,11 +12,13 @@
   "type": "commonjs",
   "dependencies": {
     "@getbrevo/brevo": "^6.0.3",
+    "@google/genai": "^2.30.0",
     "bcryptjs": "^3.0.3",
     "dotenv": "^18.0.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "mongoose": "^9.10.2",
-    "nodemailer": "^10.0.14"
+    "nodemailer": "^10.0.14",
+    "openai": "^7.36.0"
   }
 }
