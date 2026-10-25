@@ -194,6 +194,9 @@ app.get("/booking.html", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "booking.html"));
 });
 
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 // ========================================
 // USER REGISTER
@@ -584,32 +587,22 @@ app.post(
             );
 
 
-            const booking = new Booking({
-
-                name:
-                    req.body.name,
-
-                phone:
-                    req.body.phone,
-
-                service:
-                    req.body.service,
-
-                address:
-                    req.body.address,
-
-                date:
-                    req.body.date,
-
-                status:
-                    "Pending"
-
-            });
+            
 
 
-            await booking.save();
-          
-            await sendAdminEmail(
+const booking = new Booking({
+    userId: req.session.userId,
+    name: req.body.name,
+    phone: req.body.phone,
+    service: req.body.service,
+    address: req.body.address,
+    date: req.body.date,
+    status: "Pending"
+});
+
+await booking.save();
+
+await sendAdminEmail(
     "📦 New FixNear Booking",
     `
 New Customer Booking Received
@@ -625,32 +618,18 @@ Booking ID: ${booking._id}
 `
 );
 
+console.log("Booking saved successfully!");
 
-            console.log(
-                "Booking saved successfully!"
-            );
-
-
-            res.redirect(
-                `/booking-success.html?id=${booking._id}`
-            );
+res.redirect(`/booking-success.html?id=${booking._id}`);
 
 
         } catch (error) {
-
-            console.log(
-                "Booking error:",
-                error.message
-            );
-
+            console.log("Booking error:", error.message);
 
             res.status(500).send(
-                "Booking failed! " +
-                error.message
+                "Booking failed! " + error.message
             );
-
         }
-
     }
 );
 
@@ -1320,6 +1299,17 @@ app.get("/api/worker/status/:id", async (req, res) => {
 });
 
 
+app.get("/api/my-bookings", (req, res) => {
+    console.log("MY BOOKINGS REQUEST RECEIVED");
+
+    res.json({
+        success: true,
+        message: "My bookings route is working!"
+    });
+});
+
+
+
 app.listen(
     PORT,
     "0.0.0.0",
@@ -1328,6 +1318,8 @@ app.listen(
         console.log(
             `Server running on port ${PORT}`
         );
+        console.log("FIXNEAR TEST SERVER STARTED");
 
     }
 );
+

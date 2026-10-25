@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Submitted | FixNear</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #edf4ff, #f8faff, #e8f5ff);
+            color: #172554;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,.85);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #1769ff;
+            text-decoration: none;
+        }
+
+        .logo span { color: #172554; }
+
+        header a.home {
+            text-decoration: none;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        main {
+            width: min(680px, 92%);
+            margin: 45px auto;
+            flex: 1;
+            animation: appear .65s ease both;
+        }
+
+        .card {
+            background: white;
+            padding: 38px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(30, 64, 175, .12);
+            border: 1px solid #e5edff;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 86px;
+            height: 86px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 22px;
+            border-radius: 50%;
+            color: #15803d;
+            background: #dcfce7;
+            font-size: 44px;
+            animation: pop .5s ease .15s both;
+        }
+
+        .eyebrow {
+            color: #16803d;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            font-size: 12px;
+        }
+
+        h1 {
+            font-size: clamp(27px, 5vw, 36px);
+            margin: 12px 0;
+        }
+
+        .intro {
+            color: #64748b;
+            line-height: 1.7;
+            margin: 0 auto 28px;
+            max-width: 490px;
+        }
+
+        .id-box {
+            text-align: left;
+            background: #f1f6ff;
+            border: 1px solid #d7e5ff;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .id-heading {
+            font-size: 13px;
+            color: #52627b;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .id-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #applicationId {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1746a2;
+            overflow-wrap: anywhere;
+            flex: 1;
+        }
+
+        button, .button {
+            border: 0;
+            cursor: pointer;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform .2s, background .2s;
+        }
+
+        button:hover, .button:hover { transform: translateY(-2px); }
+
+        .copy-btn {
+            background: #dce8ff;
+            color: #1746a2;
+        }
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 17px;
+            text-align: left;
+        }
+
+        .status-label {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .pending {
+            background: #fff7d6;
+            color: #925b00;
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .next-steps {
+            text-align: left;
+            margin: 28px 0;
+        }
+
+        .next-steps h2 { font-size: 18px; }
+
+        .step {
+            display: flex;
+            gap: 13px;
+            margin: 17px 0;
+            color: #52627b;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .number {
+            flex-shrink: 0;
+            width: 29px;
+            height: 29px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #e7efff;
+            color: #1769ff;
+            font-weight: 800;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .actions a {
+            flex: 1;
+            min-width: 170px;
+            text-align: center;
+        }
+
+        .primary { background: #1769ff; color: white; }
+        .secondary { background: #edf2f7; color: #24334d; }
+
+        .note {
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 22px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pop {
+            from { opacity: 0; transform: scale(.65); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 480px) {
+            header { padding: 17px 5%; }
+            .logo { font-size: 22px; }
+            main { margin: 25px auto; }
+            .card { padding: 25px 18px; }
+            .id-row { align-items: stretch; flex-direction: column; }
+            .actions { flex-direction: column; }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="/" class="logo">Fix<span>Near</span></a>
+        <a href="/" class="home">Home</a>
+    </header>
+
+    <main>
+        <section class="card">
+            <div class="success-icon">✓</div>
+
+            <div class="eyebrow">Submission complete</div>
+            <h1>Application Submitted!</h1>
+
+            <p class="intro">
+                Thank you for applying to join FixNear.
+                Your application has been received successfully.
+                Keep your Application ID safe for future reference.
+            </p>
+
+            <div class="id-box">
+                <div class="id-heading">YOUR APPLICATION ID</div>
+                <div class="id-row">
+                    <div id="applicationId">Loading...</div>
+                    <button class="copy-btn" id="copyButton" type="button">
+                        Copy ID
+                    </button>
+                </div>
+            </div>
+
+            <div class="status-row">
+                <div>
+                    <strong>Application status</strong>
+                    <div class="status-label">Your current review status</div>
+                </div>
+                <span class="pending">Pending</span>
+            </div>
+
+            <div class="next-steps">
+                <h2>What happens next?</h2>
+
+                <div class="step">
+                    <span class="number">1</span>
+                    <span>Your application will be reviewed by the FixNear team.</span>
+                </div>
+
+                <div class="step">
+                    <span class="number">2</span>
+                    <span>Keep your Application ID safe. You will need it to check your status.</span>
+                </div>
+
+                <div class="step">
+                    <span class="number">3</span>
+                    <span>Use the status-check page to see whether your application is Pending, Approved or Rejected.</span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a href="/check-worker-status.html" class="button primary">
+                    Check Application Status
+                </a>
+                <a href="/" class="button secondary">
+                    Back to Home
+                </a>
+            </div>
+
+            <p class="note">
+                Please save your Application ID before leaving this page.
+                Approval is subject to application review.
+            </p>
+        </section>
+    </main>
+
+    <footer>© 2026 FixNear. All rights reserved.</footer>
+
+    <script>
+        const applicationId = sessionStorage.getItem("fixnearWorkerApplicationId");
+        const idElement = document.getElementById("applicationId");
+        const copyButton = document.getElementById("copyButton");
+
+        if (applicationId) {
+            idElement.textContent = applicationId;
+        } else {
+            idElement.textContent = "Application ID unavailable";
+            copyButton.disabled = true;
+            copyButton.textContent = "Unavailable";
+        }
+
+        copyButton.addEventListener("click", async () => {
+            if (!applicationId) return;
+
+            try {
+                await navigator.clipboard.writeText(applicationId);
+                copyButton.textContent = "Copied!";
+            } catch (error) {
+                const range = document.createRange();
+                range.selectNodeContents(idElement);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+                copyButton.textContent = "Select and copy";
+            }
+        });
+    </script>
+</body>
+</html>

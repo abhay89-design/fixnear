@@ -656,28 +656,28 @@
                         await response.json();
 
 
-                    if (response.ok) {
+                    
 
-                        alert(
-                            "✅ " +
-                            result.message
-                        );
+if (response.ok) {
+    if (!result.workerId) {
+        alert("Application submitted, but the Application ID was not returned. Please contact FixNear support.");
+        return;
+    }
 
-                        document
-                            .getElementById("workerForm")
-                            .reset();
+    sessionStorage.setItem(
+        "fixnearWorkerApplicationId",
+        result.workerId
+    );
 
-                    } else {
+    window.location.href = "/worker-application-success.html";
 
-                        alert(
-                            "❌ " +
-                            (
-                                result.message ||
-                                "Application could not be submitted."
-                            )
-                        );
+} else {
+    alert(
+        "❌ " +
+        (result.message || "Application could not be submitted.")
+    );
+}
 
-                    }
 
                 } catch (error) {
 
