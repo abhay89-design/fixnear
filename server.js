@@ -1128,6 +1128,10 @@ app.delete(
 
 app.post("/api/ai-assistant", async (req, res) => {
     console.log("AI ROUTE HIT");
+
+
+    console.log("Gemini configured:", !!gemini);
+console.log("Issue received:", req.body?.issue);
     try {
         if (!gemini) {
             return res.status(503).json({
@@ -1135,7 +1139,7 @@ app.post("/api/ai-assistant", async (req, res) => {
             });
         }
 
-        const issue = req.body;
+        const issue = req.body?.issue;
 
         if (
             typeof issue !== "string" ||
@@ -1149,6 +1153,8 @@ app.post("/api/ai-assistant", async (req, res) => {
 
         console.log("Customer issue received:", issue);
 
+        console.log("Calling Gemini API now...");
+
         const result = await gemini.models.generateContent({
             model: "gemini-3.8-flash",
             contents: `You are FixNear's home repair assistant in India.
@@ -1159,11 +1165,16 @@ Never claim a booking is completed.
 For dangerous electrical or gas problems, advise the customer to stay away and contact a qualified professional.
 Customer's issue: ${issue.trim()}`,
             config: {
-                maxOutputTokens: 300
+                maxOutputTokens: 600
             }
         });
 
         console.log("Gemini full reply:", result.text);
+
+        console.log(
+    "Gemini finish reason:",
+    result.candidates?.[0]?.finishReason
+);
 
         res.json({
             reply: result.text || "Abhi jawab nahi mil paya."
@@ -1270,6 +1281,40 @@ Worker ID: ${worker._id}
         res.status(500).json({
             success: false,
             message: "Server error. Please try again later."
+        });
+    }
+});
+
+// Check worker application status
+app.get("/api/worker/status/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Validate Application ID
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                message: "Invalid Application ID"
+            });
+        }
+
+        // Find worker and return only status
+        const worker = await Worker.findById(id).select("status");
+
+        if (!worker) {
+            return res.status(404).json({
+                message: "Application not found"
+            });
+        }
+
+        res.json({
+            status: worker.status
+        });
+
+    } catch (error) {
+        console.error("Worker status lookup error:", error.message);
+
+        res.status(500).json({
+            message: "Unable to check status"
         });
     }
 });

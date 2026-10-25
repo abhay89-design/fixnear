@@ -127,6 +127,7 @@
                 throw new Error(data.reply || "AI abhi available nahi hai.");
             }
 
+            console.log("AI response received:", data);
             replyMessage.textContent =
                 "FixNear AI: " + (data.reply || "Abhi jawab nahi mil paya.");
         } catch (error) {

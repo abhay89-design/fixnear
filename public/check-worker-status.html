@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Application Status | FixNear</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #eef5ff, #f8faff, #e8f1ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            overflow-x: hidden;
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(2px);
+            pointer-events: none;
+            animation: float 7s ease-in-out infinite;
+        }
+
+        .orb-one {
+            width: 230px;
+            height: 230px;
+            background: #b9d7ff80;
+            top: -65px;
+            left: -60px;
+        }
+
+        .orb-two {
+            width: 190px;
+            height: 190px;
+            background: #c8b9ff65;
+            right: -45px;
+            bottom: -50px;
+            animation-delay: -3s;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 460px;
+            position: relative;
+            z-index: 1;
+            animation: appear .75s ease both;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 24px;
+            animation: slideDown .8s ease both;
+        }
+
+        .brand-icon {
+            width: 62px;
+            height: 62px;
+            border-radius: 20px;
+            margin: 0 auto 12px;
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 27px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1677ff, #6248ef);
+            box-shadow: 0 12px 28px #397bff40;
+            transform: rotate(-5deg);
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        .brand h1 {
+            font-size: 29px;
+            color: #142544;
+            letter-spacing: -.8px;
+        }
+
+        .brand h1 span {
+            color: #1677ff;
+        }
+
+        .brand p {
+            margin-top: 5px;
+            color: #71809b;
+            font-size: 13px;
+        }
+
+        .card {
+            background: #ffffffed;
+            border: 1px solid #ffffff;
+            border-radius: 25px;
+            padding: 32px;
+            box-shadow: 0 24px 65px #244a8518;
+            backdrop-filter: blur(14px);
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 28px 75px #244a8525;
+        }
+
+        .card h2 {
+            color: #192a48;
+            font-size: 21px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #78869d;
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #263754;
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap span {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 15px 15px 46px;
+            border: 1.5px solid #e0e8f4;
+            border-radius: 13px;
+            background: #f9fbff;
+            outline: none;
+            color: #1c2c48;
+            font-family: inherit;
+            font-size: 13px;
+            transition: border-color .25s, box-shadow .25s, background .25s;
+        }
+
+        input:focus {
+            border-color: #4389ff;
+            background: white;
+            box-shadow: 0 0 0 4px #1677ff16;
+        }
+
+        button {
+            width: 100%;
+            border: 0;
+            border-radius: 13px;
+            padding: 15px;
+            margin-top: 19px;
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(110deg, #1677ff, #5848ec);
+            box-shadow: 0 9px 20px #397bff30;
+            transition: transform .25s, box-shadow .25s, opacity .25s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 13px 25px #397bff45;
+        }
+
+        button:active {
+            transform: scale(.98);
+        }
+
+        button:disabled {
+            cursor: wait;
+            opacity: .75;
+            transform: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            vertical-align: middle;
+            border: 2px solid #ffffff70;
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+        }
+
+        .error {
+            color: #c6374d;
+            background: #fff0f2;
+            border-radius: 10px;
+            padding: 11px 12px;
+            margin-top: 14px;
+            font-size: 12px;
+            animation: appear .25s ease both;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .result {
+            text-align: center;
+            animation: resultIn .65s cubic-bezier(.2,.8,.2,1) both;
+        }
+
+        .result-heading {
+            color: #142544;
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -.7px;
+            margin-bottom: 30px;
+            animation: slideDown .65s ease both;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 175px;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            animation: statusPop .6s .15s cubic-bezier(.2,.8,.2,1) both;
+        }
+
+        .status.Pending {
+            color: #9a6500;
+            background: #fff2cf;
+            border: 1px solid #ffe3a0;
+        }
+
+        .status.Approved {
+            color: #08784c;
+            background: #d9f8e9;
+            border: 1px solid #a7e9c9;
+        }
+
+        .status.Rejected {
+            color: #bd2d43;
+            background: #ffe1e5;
+            border: 1px solid #ffc1ca;
+        }
+
+        @keyframes appear {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes resultIn {
+            from { opacity: 0; transform: translateY(18px) scale(.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes statusPop {
+            from { opacity: 0; transform: scale(.75); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-6px) rotate(1deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-22px); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 25px 21px; }
+            .brand h1 { font-size: 26px; }
+            .result-heading { font-size: 23px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+
+    <main class="container">
+        <header class="brand" id="brand">
+            <div class="brand-icon">F</div>
+            <h1>Fix<span>Near</span></h1>
+            <p>Your trusted service partner</p>
+        </header>
+
+        <section class="card" id="formCard">
+            <h2>Application Status</h2>
+            <p class="subtitle">Enter your Application ID to check your worker application status.</p>
+
+            <form id="statusForm">
+                <label for="applicationId">Application ID</label>
+                <div class="input-wrap">
+                    <span>🔎</span>
+                    <input
+                        id="applicationId"
+                        type="text"
+                        placeholder="Enter your Application ID"
+                        autocomplete="off"
+                        required
+                    >
+                </div>
+
+                <button type="submit" id="checkButton">
+                    Check Status →
+                </button>
+
+                <p id="errorMessage" class="error hidden" role="alert"></p>
+            </form>
+        </section>
+
+        <section id="resultCard" class="card result hidden" aria-live="polite">
+            <h2 class="result-heading">Welcome to FixNear</h2>
+            <div id="statusResult" class="status">Pending</div>
+        </section>
+    </main>
+
+    <script>
+        const statusForm = document.getElementById("statusForm");
+        const applicationIdInput = document.getElementById("applicationId");
+        const checkButton = document.getElementById("checkButton");
+        const errorMessage = document.getElementById("errorMessage");
+        const formCard = document.getElementById("formCard");
+        const resultCard = document.getElementById("resultCard");
+        const brand = document.getElementById("brand");
+        const statusResult = document.getElementById("statusResult");
+
+        statusForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const applicationId = applicationIdInput.value.trim();
+
+            errorMessage.classList.add("hidden");
+            errorMessage.textContent = "";
+
+            if (!applicationId) {
+                showError("Please enter your Application ID.");
+                return;
+            }
+
+            checkButton.disabled = true;
+            checkButton.innerHTML = '<span class="spinner"></span>Checking...';
+
+            try {
+                const response = await fetch(
+                    `/api/worker/status/${encodeURIComponent(applicationId)}`
+                );
+
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(
+                        response.status === 404
+                            ? "Application ID not found. Please check it and try again."
+                            : response.status === 400
+                            ? "Invalid Application ID. Please check it and try again."
+                            : data.message || "Unable to check status. Please try again."
+                    );
+                }
+
+                const allowedStatuses = ["Pending", "Approved", "Rejected"];
+
+                if (!allowedStatuses.includes(data.status)) {
+                    throw new Error("Unable to read the application status.");
+                }
+
+                statusResult.textContent = data.status;
+                statusResult.className = "status " + data.status;
+
+                formCard.classList.add("hidden");
+                brand.classList.add("hidden");
+                resultCard.classList.remove("hidden");
+            } catch (error) {
+                showError(error.message || "Something went wrong. Please try again.");
+                checkButton.disabled = false;
+                checkButton.textContent = "Check Status →";
+            }
+        });
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>

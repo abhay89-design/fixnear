@@ -232,6 +232,31 @@
             transform: translateY(-2px);
         }
 
+        /* Password show / hide button */
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 19px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 6px;
+            z-index: 2;
+        }
+
+        .password-toggle:focus-visible {
+            outline: 2px solid #8eeeff;
+            border-radius: 6px;
+        }
+
+        .input-box input.password-input {
+            padding-right: 48px;
+        }
+
         /* =========================
            REGISTER BUTTON
         ========================= */
@@ -324,6 +349,10 @@
 
             text-shadow:
                 0 0 10px #8eeeff;
+        }
+
+        .worker-link {
+            margin-top: 12px;
         }
 
         .back-home {
@@ -540,6 +569,32 @@
             </div>
 
 
+            <!-- Mobile Number -->
+
+            <div class="form-group">
+
+                <label for="phone">Mobile Number</label>
+
+                <div class="input-box">
+
+                    <span>📱</span>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter 10-digit mobile number"
+                        inputmode="numeric"
+                        pattern="[6-9][0-9]{9}"
+                        maxlength="10"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
             <!-- Password -->
 
             <div class="form-group">
@@ -553,6 +608,7 @@
                     <input
                         type="password"
                         id="password"
+                        class="password-input"
                         placeholder="Create a password"
                         minlength="6"
                         required
@@ -576,10 +632,18 @@
                     <input
                         type="password"
                         id="confirmPassword"
+                        class="password-input"
                         placeholder="Confirm your password"
                         minlength="6"
                         required
                     >
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        data-target="confirmPassword"
+                        aria-label="Show password"
+                        aria-pressed="false"
+                    >👁️</button>
 
                 </div>
 
@@ -613,6 +677,11 @@
         </div>
 
 
+        <div class="login-link worker-link">
+            Want to work with FixNear?
+            <a href="worker-register.html">Join as a Worker</a>
+        </div>
+
         <a
             href="index.html"
             class="back-home">
@@ -625,6 +694,19 @@
 
 
     <script>
+
+        // Toggle visibility for the confirm-password field.
+        document.querySelectorAll(".password-toggle").forEach((button) => {
+            button.addEventListener("click", () => {
+                const input = document.getElementById(button.dataset.target);
+                const isHidden = input.type === "password";
+
+                input.type = isHidden ? "text" : "password";
+                button.textContent = isHidden ? "🙈" : "👁️";
+                button.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
+                button.setAttribute("aria-pressed", String(isHidden));
+            });
+        });
 
         document
         .getElementById("registerForm")
@@ -639,6 +721,9 @@
             const email =
                 document.getElementById("email").value.trim();
 
+            const phone =
+                document.getElementById("phone").value.trim();
+
             const password =
                 document.getElementById("password").value;
 
@@ -648,6 +733,15 @@
 
             const message =
                 document.getElementById("message");
+
+
+            /* Mobile Number Validation */
+
+            if (!/^[6-9][0-9]{9}$/.test(phone)) {
+                message.style.color = "#ff6b6b";
+                message.textContent = "Please enter a valid 10-digit Indian mobile number.";
+                return;
+            }
 
 
             /* Password Match */
@@ -688,6 +782,8 @@
                             name: name,
 
                             email: email,
+
+                            phone: phone,
 
                             password: password
 
